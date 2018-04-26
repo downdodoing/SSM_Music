@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.hnust.dao.MusicMapper">
+	<resultMap id="BaseResultMap" type="com.cn.hnust.pojo.Music">
+		<id column="musicID" property="musicid" jdbcType="INTEGER" />
+		<result column="musicName" property="musicname" jdbcType="VARCHAR" />
+		<result column="musicArtist" property="musicartist" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		musicID, musicName, musicArtist
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from music
+		where musicID = #{musicid,jdbcType=INTEGER}
+	</select>
+	<select id="selectByNameAndArtist" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from music
+		where musicName = #{0} and
+		musicArtist =#{1}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from music
+		where musicID = #{musicid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.cn.hnust.pojo.Music">
+		insert into music (
+		musicName,musicArtist)
+		values
+		(#{musicname,jdbcType=VARCHAR},
+		#{musicartist,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.cn.hnust.pojo.Music">
+		insert into music
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="musicid != null">
+				musicID,
+			</if>
+			<if test="musicname != null">
+				musicName,
+			</if>
+			<if test="musicartist != null">
+				musicArtist,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="musicid != null">
+				#{musicid,jdbcType=INTEGER},
+			</if>
+			<if test="musicname != null">
+				#{musicname,jdbcType=VARCHAR},
+			</if>
+			<if test="musicartist != null">
+				#{musicartist,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.cn.hnust.pojo.Music">
+		update music
+		<set>
+			<if test="musicname != null">
+				musicName = #{musicname,jdbcType=VARCHAR},
+			</if>
+			<if test="musicartist != null">
+				musicArtist = #{musicartist,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where musicID = #{musicid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.cn.hnust.pojo.Music">
+		update music
+		set
+		musicName = #{musicname,jdbcType=VARCHAR},
+		musicArtist =
+		#{musicartist,jdbcType=VARCHAR}
+		where musicID =
+		#{musicid,jdbcType=INTEGER}
+	</update>
+</mapper>

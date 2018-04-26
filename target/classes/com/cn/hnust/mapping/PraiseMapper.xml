@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.hnust.dao.PraiseMapper">
+	<resultMap id="BaseResultMap" type="com.cn.hnust.pojo.Praise">
+		<id column="praiseID" property="praiseid" jdbcType="INTEGER" />
+		<result column="userID" property="userid" jdbcType="INTEGER" />
+		<result column="commonID" property="commonid" jdbcType="VARCHAR" />
+		<result column="praiseNum" property="praisenum" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		praiseID, userID, commonID,musicID
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from praise
+		where praiseID = #{praiseid,jdbcType=INTEGER}
+	</select>
+	<select id="select" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from praise
+		where musicID = #{0}
+	</select>
+	<select id="selectNum" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		c.commonID,
+		COUNT(p.commonID) AS praiseNum
+		FROM
+		common AS c,
+		praise AS p
+		WHERE
+		c.commonID = p.commonID
+		and p.musicID = #{0}
+		GROUP BY
+		p.commonID
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from praise
+		where praiseID = #{praiseid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.cn.hnust.pojo.Praise">
+		insert into praise (
+		userID,
+		commonID,musicID)
+		values (
+		#{userid,jdbcType=INTEGER},
+		#{commonid,jdbcType=VARCHAR},
+		#{musicid,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.cn.hnust.pojo.Praise">
+		insert into praise
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="praiseid != null">
+				praiseID,
+			</if>
+			<if test="userid != null">
+				userID,
+			</if>
+			<if test="commonid != null">
+				commonID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="praiseid != null">
+				#{praiseid,jdbcType=INTEGER},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=INTEGER},
+			</if>
+			<if test="commonid != null">
+				#{commonid,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.cn.hnust.pojo.Praise">
+		update praise
+		<set>
+			<if test="userid != null">
+				userID = #{userid,jdbcType=INTEGER},
+			</if>
+			<if test="commonid != null">
+				commonID = #{commonid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where praiseID = #{praiseid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.cn.hnust.pojo.Praise">
+		update praise
+		set
+		userID = #{userid,jdbcType=INTEGER},
+		commonID =
+		#{commonid,jdbcType=VARCHAR}
+		where praiseID =
+		#{praiseid,jdbcType=INTEGER}
+	</update>
+</mapper>
